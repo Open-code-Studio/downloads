@@ -2,8 +2,8 @@
     "name": "Open-web-download.kit 1.0",
     "version": "1.0.0",
     "description": "一个开源的跨平台下载站代码",
-    "author": "Your Name",
-    "date": "2026-06-14",
+    "author": "仓颉",
+    "date": "2026-06",
     "category": "工具",
     "platforms": ["windows", "macos", "linux"],
     "files": [
