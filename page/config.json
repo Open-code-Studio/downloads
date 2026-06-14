@@ -1,0 +1,21 @@
+{
+    "site": {
+        "name": "OCS下载站",
+        "description": "下载站点",
+        "language": "zh-CN",
+        "theme": {
+            "default": "dark",
+            "allowToggle": true
+        },
+        "primaryColor": "#4AA26F"
+    },
+    "projects": [
+        "publish1"
+    ],
+    "footer": {
+        "copyright": "© 2026 Open-web-download.kit. All rights reserved.",
+        "links": [
+            { "label": "GitHub", "url": "https://github.com" }
+        ]
+    }
+}

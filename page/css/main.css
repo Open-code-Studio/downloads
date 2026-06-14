@@ -1,0 +1,109 @@
+/* ============================================
+   Main Site Styles (non-design-system overrides)
+   ============================================ */
+
+/* Smooth page transitions */
+.md3-card-grid {
+    animation: fadeInUp var(--md-sys-motion-duration-medium) var(--md-sys-motion-easing-standard);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Search clear button */
+.md3-search__clear {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--md-sys-color-on-surface-variant);
+    cursor: pointer;
+    display: none;
+    padding: 4px;
+    border-radius: var(--md-sys-shape-full);
+}
+
+.md3-search__clear:hover {
+    background-color: var(--md-sys-color-surface-container-highest);
+}
+
+.md3-search__clear.visible {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Detail panel scrollbar */
+.md3-detail-panel__body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.md3-detail-panel__body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.md3-detail-panel__body::-webkit-scrollbar-thumb {
+    background-color: var(--md-sys-color-outline-variant);
+    border-radius: 3px;
+}
+
+/* Click ripple effect */
+.md3-ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+.md3-ripple-effect {
+    position: absolute;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: scale(0);
+    animation: ripple 0.6s linear;
+    pointer-events: none;
+}
+
+[data-theme="light"] .md3-ripple-effect {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* Loading skeleton */
+.md3-skeleton {
+    background: linear-gradient(
+        90deg,
+        var(--md-sys-color-surface-container) 25%,
+        var(--md-sys-color-surface-container-high) 50%,
+        var(--md-sys-color-surface-container) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: var(--md-sys-shape-extra-small);
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Platform badge colors */
+.md3-badge--windows { background-color: #0078d4; color: #fff; }
+.md3-badge--macos { background-color: #333; color: #fff; }
+.md3-badge--linux { background-color: #f5a623; color: #1a1a1a; }
+
+[data-theme="dark"] .md3-badge--macos { background-color: #f0f0f0; color: #1a1a1a; }

@@ -1,0 +1,23 @@
+{
+    "name": "Open-web-download.kit 1.0",
+    "version": "1.0.0",
+    "description": "一个开源的跨平台下载站代码",
+    "author": "Your Name",
+    "date": "2026-06-14",
+    "category": "工具",
+    "platforms": ["windows", "macos", "linux"],
+    "files": [
+        {
+            "name": "Open-web-download.kit 1.0 code",
+            "platform": "Web",
+            "arch": "",
+            "size": "40 KB",
+            "type": "zip",
+            "url": "Open-web-download.kit-main.zip"
+        }
+    ],
+    "changelog": [
+        { "version": "1.0.0", "date": "2026-06", "changes": ["首次发布", "支持 Web 平台"] }
+    ],
+    "tags": ["工具", "下载站", "开源","建站", "跨平台"]
+}
