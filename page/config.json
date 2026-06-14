@@ -1,7 +1,7 @@
 {
     "site": {
         "name": "OCS下载站",
-        "description": "下载站点",
+        "description": "OCS下载站点",
         "language": "zh-CN",
         "theme": {
             "default": "dark",
@@ -13,9 +13,9 @@
         "publish1"
     ],
     "footer": {
-        "copyright": "© 2026 Open-web-download.kit. All rights reserved.",
+        "copyright": "© 2026 Open-code-Studio. All rights reserved.",
         "links": [
-            { "label": "GitHub", "url": "https://github.com" }
+            { "label": "GitHub", "url": "https://github.com/Open-code-Studio" }
         ]
     }
 }
