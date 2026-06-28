@@ -1,0 +1,23 @@
+{
+    "name": "JMCL",
+    "version": "2026.1.0",
+    "description": "一个开源的跨平台MC JAVA EDITION 启动器.",
+    "author": "仓颉",
+    "date": "2026-06",
+    "category": "MC启动器",
+    "platforms": ["windows", "macos", "linux"],
+    "files": [
+        {
+            "name": "JMCL v2026.1.0 dmg file for apple macOS",
+            "platform": "all",
+            "arch": "all",
+            "size": " MB",
+            "type": "dmg",
+            "url": "../file/JMCL/JMCL-2026.3.0.dmg"
+        }
+    ],
+    "changelog": [
+        { "version": "2026.1.0", "date": "2026-06", "changes": ["首次正式发布", "(本身是跨平台的,但JAR文件有bug.)"] }
+    ],
+    "tags": ["工具", "开源","MC启动器", "跨平台"]
+}

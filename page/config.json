@@ -10,7 +10,8 @@
         "primaryColor": "#4AA26F"
     },
     "projects": [
-        "Open-web-download.kit"
+        "Open-web-download.kit",
+        "JMCL"
     ],
     "footer": {
         "copyright": "© 2026 Open-code-Studio. All rights reserved.",
