@@ -3,7 +3,9 @@
  *
  * 依赖：
  * - window.SITE_CONFIG (由 config.js 加载 page/config.json)
- * - 每个项目在 file/<project>/main.json 中定义
+ * - 项目来源支持两种方式：
+ *   1. 本地文件夹名：如 "Open-web-download.kit" → 读取 file/<id>/main.json
+ *   2. GitHub 仓库链接：如 "https://github.com/Owner/Repo" → 自动拉取 Release 信息
  */
 
 // ============================================================
@@ -222,9 +224,130 @@ async function initSite() {
 // ============================================================
 // 加载项目数据
 // ============================================================
+
+/** 判断项目条目是否为 GitHub URL */
+function isGitHubUrl(entry) {
+    return typeof entry === 'string' && /^https?:\/\/github\.com\/([^/]+)\/([^/]+)/.test(entry);
+}
+
+/** 从 GitHub URL 提取 owner/repo */
+function parseGitHubRepo(url) {
+    const m = url.match(/github\.com\/([^/]+)\/([^/]+)/);
+    if (!m) return null;
+    let repo = m[2];
+    // 去掉尾部 .git
+    repo = repo.replace(/\.git$/, '');
+    return { owner: m[1], repo };
+}
+
+/** 从文件名推断平台 */
+function inferPlatform(filename) {
+    const f = filename.toLowerCase();
+    if (f.endsWith('.dmg')) return 'macos';
+    if (f.endsWith('.exe') || f.endsWith('.msi')) return 'windows';
+    if (f.endsWith('.appimage') || f.endsWith('.sh') || f.endsWith('.deb') || f.endsWith('.rpm')) return 'linux';
+    if (f.endsWith('.jar')) return 'all';
+    return 'all';
+}
+
+/** 从文件名推断文件类型 */
+function inferFileType(filename) {
+    const f = filename.toLowerCase();
+    const ext = f.split('.').pop();
+    return ext || 'unknown';
+}
+
+/** 从 GitHub Release API 拉取并转换为项目数据 */
+async function loadFromGitHubRelease(entry) {
+    const repo = parseGitHubRepo(entry);
+    if (!repo) throw new Error('无法解析 GitHub 仓库地址');
+    const projectId = `${repo.owner}/${repo.repo}`;
+
+    // 首先获取仓库基本信息
+    let repoInfo = {};
+    try {
+        const repoRes = await fetch(`https://api.github.com/repos/${repo.owner}/${repo.repo}`);
+        if (repoRes.ok) {
+            const repoData = await repoRes.json();
+            repoInfo = {
+                description: repoData.description || '',
+                topics: repoData.topics || [],
+                language: repoData.language || ''
+            };
+        }
+    } catch (e) {
+        console.warn(`[Main] 获取仓库信息失败:`, e);
+    }
+
+    // 获取最新 Release
+    const releaseRes = await fetch(`https://api.github.com/repos/${repo.owner}/${repo.repo}/releases/latest`);
+    if (!releaseRes.ok) throw new Error(`Release HTTP ${releaseRes.status}`);
+    const release = await releaseRes.json();
+
+    // 转换文件列表
+    const files = (release.assets || []).map(asset => ({
+        name: asset.name,
+        platform: inferPlatform(asset.name),
+        arch: '',
+        size: formatFileSize(asset.size),
+        type: inferFileType(asset.name),
+        url: asset.browser_download_url
+    }));
+
+    // 收集平台
+    const platformSet = new Set();
+    files.forEach(f => { if (f.platform !== 'all') platformSet.add(f.platform); });
+
+    // 转换更新日志
+    const changelog = [{
+        version: release.tag_name || '?',
+        date: (release.published_at || '').substring(0, 10),
+        changes: (release.body || '')
+            .split('\n')
+            .filter(line => line.trim().startsWith('-') || line.trim().startsWith('*'))
+            .map(line => line.replace(/^[-*]\s*/, '').trim())
+            .filter(c => c.length > 0 && c.length < 120)
+    }];
+    if (changelog[0].changes.length === 0) {
+        changelog[0].changes = ['发布说明见 GitHub Release'];
+    }
+
+    // 标签：合并 topics + 语言
+    const tags = [...(repoInfo.topics || []), repoInfo.language].filter(Boolean);
+
+    return {
+        name: repo.repo,
+        version: (release.tag_name || '').replace(/^v/, ''),
+        description: repoInfo.description || release.name || repo.repo,
+        author: repo.owner,
+        date: (release.published_at || '').substring(0, 10),
+        category: tags[0] || '工具',
+        platforms: [...platformSet],
+        tags: tags.slice(0, 8),
+        files,
+        changelog,
+        _source: 'github-release'
+    };
+}
+
 async function loadAllProjects() {
-    const projectIds = window.SITE_CONFIG?.projects || [];
-    const loads = projectIds.map(async (id) => {
+    const entries = window.SITE_CONFIG?.projects || [];
+    const loads = entries.map(async (entry) => {
+        // 方式一：GitHub URL — 自动从 Release 拉取
+        if (isGitHubUrl(entry)) {
+            const repo = parseGitHubRepo(entry);
+            const projectId = `${repo.owner}/${repo.repo}`;
+            try {
+                STATE.projects[projectId] = await loadFromGitHubRelease(entry);
+                console.log(`[Main] GitHub 项目加载成功: ${projectId}`);
+            } catch (err) {
+                console.warn(`[Main] GitHub 项目 "${entry}" 加载失败:`, err);
+            }
+            return;
+        }
+
+        // 方式二：本地文件夹名 — 读取 file/<id>/main.json
+        const id = entry;
         try {
             const res = await fetch(`../file/${id}/main.json`);
             if (!res.ok) throw new Error(`HTTP ${res.status}`);

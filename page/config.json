@@ -11,7 +11,7 @@
     },
     "projects": [
         "Open-web-download.kit",
-        "JMCL"
+        "https://github.com/Open-code-Studio/JMCL"
     ],
     "footer": {
         "copyright": "© 2026 Open-code-Studio. All rights reserved.",
