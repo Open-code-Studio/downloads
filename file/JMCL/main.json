@@ -8,12 +8,36 @@
     "platforms": ["windows", "macos", "linux"],
     "files": [
         {
-            "name": "JMCL v2026.1.0 dmg file for apple macOS",
+            "name": "JMCL-2026.1.0.dmg",
+            "platform": "macos",
+            "arch": "arm64/x64",
+            "size": "124.2 MB",
+            "type": "dmg",
+            "url": "https://github.com/Open-code-Studio/JMCL/releases/download/v2026.1.0/JMCL-2026.1.0.dmg"
+        },
+        {
+            "name": "JVM-MCL-2026.1.0.exe",
+            "platform": "windows",
+            "arch": "x64",
+            "size": "11.6 MB",
+            "type": "exe",
+            "url": "https://github.com/Open-code-Studio/JMCL/releases/download/v2026.1.0/JVM-MCL-2026.1.0.exe"
+        },
+        {
+            "name": "JVM-MCL-2026.1.0.sh",
+            "platform": "linux",
+            "arch": "x64",
+            "size": "11.2 MB",
+            "type": "sh",
+            "url": "https://github.com/Open-code-Studio/JMCL/releases/download/v2026.1.0/JVM-MCL-2026.1.0.sh"
+        },
+        {
+            "name": "JVM-MCL-2026.1.0.jar",
             "platform": "all",
             "arch": "all",
-            "size": "124.72MB",
-            "type": "dmg",
-            "url": "https://media.githubusercontent.com/media/Open-code-Studio/downloads/refs/heads/main/file/JMCL/JMCL-2026.3.0.dmg"
+            "size": "11.2 MB",
+            "type": "jar",
+            "url": "https://github.com/Open-code-Studio/JMCL/releases/download/v2026.1.0/JVM-MCL-2026.1.0.jar"
         }
     ],
     "changelog": [
